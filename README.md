@@ -8,7 +8,7 @@ Each moderation capability lives in its own folder under `src/features` so devel
 - **Mop Moderation Tool**: Moderator menu actions to remove/lock comment trees or all comments in a post.
 - **Keyword Vote Tallies**: Configurable `!keyword` vote comments with a sticky tally comment per post.
 - **Banned Words Enforcement**: Auto-removes matching posts/comments and sends a modmail notice to the author; subreddit moderators are exempt.
-- **Weekly Megathread Scheduler**: Posts a recurring weekly megathread on a configurable UTC weekday, plus manual mod-triggered creation.
+- **Manual Post Publisher**: Lets moderators compose and publish text posts immediately from the subreddit menu.
 - **Flair Updater**: Updates user flair on each post/comment event using Redis-backed counts (`posts: X | comments: Y`).
 
 ### Feature Docs
@@ -16,7 +16,7 @@ Each moderation capability lives in its own folder under `src/features` so devel
 - [Mop README](src/features/mop/README.md)
 - [Keyword Votes README](src/features/keyword-votes/README.md)
 - [Banned Words README](src/features/banned-words/README.md)
-- [Weekly Megathread Scheduler README](src/features/scheduler-megathread/README.md)
+- [Manual Posting README](src/features/scheduler-megathread/README.md)
 - [Flair Updater README](src/features/flair-updater/README.md)
 
 ## Tech Stack
@@ -65,9 +65,9 @@ src/
 │   │   └── triggers.ts       # Post/comment enforcement + modmail
 │   ├── scheduler-megathread/
 │   │   ├── README.md
-│   │   ├── handlers.ts       # Scheduled/manual megathread creation logic
-│   │   ├── settings.ts       # Megathread settings parsing/validation
-│   │   └── storage.ts        # Weekly idempotency Redis keys
+│   │   ├── handlers.ts       # Manual post creation logic
+│   │   ├── menu.ts            # Post form definition
+│   │   └── settings.ts       # Default post settings and validation
 │   └── flair-updater/
 │       ├── README.md
 │       ├── settings.ts       # Flair updater feature toggle access
@@ -95,7 +95,6 @@ This template is designed to be easily customizable:
 
 - **Install settings** are configured in `devvit.json` under `settings.subreddit`.
 - **Triggers** are configured in `devvit.json` and handled in `src/routes/triggers.ts`.
-- **Scheduled jobs** are configured in `devvit.json.scheduler.tasks` and handled in `src/routes/scheduler.ts`.
 - **Feature toggles** are checked inside each feature's `settings.ts`.
 
 ## Commands

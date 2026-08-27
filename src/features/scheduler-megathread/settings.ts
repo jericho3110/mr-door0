@@ -13,7 +13,6 @@ const MAX_TITLE_LENGTH = 300;
 const MAX_BODY_LENGTH = 40000;
 
 export type WeeklyMegathreadSettings = {
-  enabled: boolean;
   title: string;
   body: string;
 };
@@ -25,9 +24,6 @@ function toSettingString(value: unknown): string | undefined {
 
 export async function getWeeklyMegathreadSettings(): Promise<WeeklyMegathreadSettings> {
   // Read all install settings needed for weekly posting.
-  const enabled = Boolean(
-    await settings.get<boolean>('weeklyMegathreadEnabled')
-  );
   const configuredTitle = toSettingString(
     await settings.get<string>('weeklyMegathreadTitle')
   )?.trim();
@@ -36,7 +32,6 @@ export async function getWeeklyMegathreadSettings(): Promise<WeeklyMegathreadSet
   )?.trim();
 
   return {
-    enabled,
     // Use defaults if setting is blank or undefined.
     title: configuredTitle || DEFAULT_POST_TITLE,
     body: configuredBody || DEFAULT_POST_BODY,
@@ -51,14 +46,14 @@ export function validateWeeklyMegathreadTitle(
   if (title.length === 0) {
     return {
       success: false,
-      error: 'Weekly megathread title cannot be empty.',
+      error: 'Post title cannot be empty.',
     };
   }
 
   if (title.length > MAX_TITLE_LENGTH) {
     return {
       success: false,
-      error: `Weekly megathread title must be ${MAX_TITLE_LENGTH} characters or fewer.`,
+      error: `Post title must be ${MAX_TITLE_LENGTH} characters or fewer.`,
     };
   }
 
@@ -74,14 +69,14 @@ export function validateWeeklyMegathreadBody(
   if (body.length === 0) {
     return {
       success: false,
-      error: 'Weekly megathread body cannot be empty.',
+      error: 'Post body cannot be empty.',
     };
   }
 
   if (body.length > MAX_BODY_LENGTH) {
     return {
       success: false,
-      error: `Weekly megathread body must be ${MAX_BODY_LENGTH} characters or fewer.`,
+      error: `Post body must be ${MAX_BODY_LENGTH} characters or fewer.`,
     };
   }
 

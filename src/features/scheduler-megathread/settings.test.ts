@@ -13,14 +13,14 @@ function request(value: string): SettingsValidationRequest<string> {
 void test('rejects empty weekly megathread titles', () => {
   assert.deepEqual(validateWeeklyMegathreadTitle(request('   ')), {
     success: false,
-    error: 'Weekly megathread title cannot be empty.',
+    error: 'Post title cannot be empty.',
   });
 });
 
 void test('rejects weekly megathread titles over 300 characters', () => {
   assert.deepEqual(validateWeeklyMegathreadTitle(request('x'.repeat(301))), {
     success: false,
-    error: 'Weekly megathread title must be 300 characters or fewer.',
+    error: 'Post title must be 300 characters or fewer.',
   });
 });
 
@@ -33,6 +33,6 @@ void test('accepts non-empty weekly megathread body text', () => {
 void test('rejects weekly megathread body text over 40000 characters', () => {
   assert.deepEqual(validateWeeklyMegathreadBody(request('x'.repeat(40001))), {
     success: false,
-    error: 'Weekly megathread body must be 40000 characters or fewer.',
+    error: 'Post body must be 40000 characters or fewer.',
   });
 });

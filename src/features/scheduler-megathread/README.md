@@ -1,18 +1,16 @@
-# Weekly Megathread Scheduler Feature
+# Manual Posting Feature
 
-This feature creates a weekly megathread post every Monday at 00:00 UTC, and also provides a moderator-only
-menu action to create the megathread manually for testing.
+This feature lets a subreddit moderator compose and publish a text post immediately.
 
-## What this feature does
+## Flow
 
-- Adds subreddit install settings for:
-    - enable/disable
-    - post title
-    - post body
-- Runs a weekly scheduler task and posts only when:
-    - feature is enabled
-    - a megathread has not already been posted this UTC week
-- Supports manual override via moderator menu action (`Create weekly megathread`) that creates a post immediately.
+- `menu.ts` builds the native **Post now** form.
+- `routes/menu.ts` opens the form from the subreddit moderator menu.
+- `routes/forms.ts` receives the title and body.
+- `handlers.ts` checks moderator post permissions and calls `reddit.submitPost`.
+- `settings.ts` provides the default title and body used to prefill the form.
+
+The feature has no scheduled task, trigger, Redis storage, or automatic posting.
 
 ## Why this is useful in real moderation
 
