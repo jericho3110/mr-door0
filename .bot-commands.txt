@@ -1,0 +1,74 @@
+MR-DOOR0 BOT COMMANDS
+=====================
+
+Run these commands from the mr-door0 project directory:
+
+cd /home/heavenlydemon/Documents/vscode_proj/testing_chamber/Reddit_mod_app_bot/mr-door0
+
+INSTALL DEPENDENCIES
+--------------------
+npm install
+Installs the project's dependencies.
+
+DEVELOPMENT
+-----------
+npm run dev
+Starts Devvit playtest for local development. Keep this running while testing code changes.
+
+npm run build
+Builds the app for production.
+
+npm run build:watch
+Rebuilds the app automatically when files change.
+
+VALIDATION
+----------
+npm run test
+Runs type checking, linting, unit tests, and the production build.
+
+npm run test:types
+Checks TypeScript for type errors.
+
+npm run test:unit
+Runs the unit tests.
+
+npm run lint
+Checks the source code with ESLint.
+
+npm run prettier
+Formats project files with Prettier.
+
+CLEANUP
+-------
+npm run clean
+Deletes the generated dist folder.
+
+UPLOAD AND INSTALL
+------------------
+npm exec devvit -- login
+Logs into Reddit through the Devvit CLI. Usually needed once.
+
+npm run deploy
+Runs validation and uploads the app to Reddit.
+
+npm exec devvit -- upload
+Uploads the app without running the full npm run deploy test sequence.
+
+npm exec devvit -- install mr_door0_dev2 mr-door0
+Installs the uploaded mr-door0 app on subreddit r/mr_door0_dev2.
+
+PUBLISH
+-------
+npm run launch
+Publishes the app for Reddit app review. Do not use this just for local testing.
+
+NORMAL WORKFLOW
+---------------
+1. Make code changes.
+2. Run: npm run deploy
+3. Install/update it with:
+   npm exec devvit -- install mr_door0_dev2 mr-door0
+4. Use the Reddit moderator menu and select Post now.
+
+Once the uploaded app is installed, your computer does not need to stay on.
+Devvit hosts the installed app and runs its menu actions and scheduled jobs.
