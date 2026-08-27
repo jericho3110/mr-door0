@@ -27,12 +27,20 @@
         "location": "subreddit",
         "forUserType": "moderator",
         "endpoint": "/internal/menu/create-weekly-megathread"
+      },
+      {
+        "label": "Post now",
+        "description": "Compose and publish a text post to this subreddit.",
+        "location": "subreddit",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/post-now"
       }
     ]
   },
   "forms": {
     "mopComment": "/internal/form/mop-comment-submit",
-    "mopPost": "/internal/form/mop-post-submit"
+    "mopPost": "/internal/form/mop-post-submit",
+    "postNow": "/internal/form/post-now-submit"
   },
   "triggers": {
     "onAppInstall": "/internal/triggers/on-app-install",

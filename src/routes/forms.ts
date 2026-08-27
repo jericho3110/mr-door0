@@ -5,6 +5,10 @@ import {
   handleMopPostSubmit,
   type NukeFormValues,
 } from '../features/mop/forms.js';
+import {
+  createPostNow,
+  type PostNowFormValues,
+} from '../features/scheduler-megathread/handlers.js';
 
 // Router for form submit endpoints declared in devvit.json/forms.
 export const forms = new Hono();
@@ -29,4 +33,10 @@ forms.post('/mop-post-submit', async (c) => {
 
   // Return UI response consumed by Reddit client.
   return c.json<UiResponse>(response, 200);
+});
+
+forms.post('/post-now-submit', async (c) => {
+  const values = await c.req.json<PostNowFormValues>();
+  const result = await createPostNow(values);
+  return c.json<UiResponse>({ showToast: result.message }, 200);
 });

@@ -22,6 +22,11 @@ type ManualMegathreadResult = {
   message: string;
 };
 
+export type PostNowFormValues = {
+  title?: string;
+  body?: string;
+};
+
 async function createMegathreadPost(
   megathreadSettings: WeeklyMegathreadSettings
 ): Promise<T3> {
@@ -44,6 +49,21 @@ async function createMegathreadPost(
     );
     throw error;
   }
+}
+
+async function canCurrentUserCreatePost(): Promise<string | undefined> {
+  const currentUser = await reddit.getCurrentUser();
+  const subreddit = await reddit.getCurrentSubreddit();
+  if (!currentUser) return 'Unable to identify current user.';
+
+  const modPermissions = await currentUser.getModPermissionsForSubreddit(
+    subreddit.name
+  );
+  const canManagePosts =
+    modPermissions.includes('all') || modPermissions.includes('posts');
+  return canManagePosts
+    ? undefined
+    : 'You need mod post permissions to create a post.';
 }
 
 export async function runWeeklyMegathreadCheck(): Promise<SchedulerResult> {
@@ -95,24 +115,11 @@ export async function createWeeklyMegathreadManual(): Promise<ManualMegathreadRe
   }
 
   // Explicit permission check keeps endpoint safe even if menu exposure changes.
-  const currentUser = await reddit.getCurrentUser();
-  const subreddit = await reddit.getCurrentSubreddit();
-  if (!currentUser) {
+  const permissionError = await canCurrentUserCreatePost();
+  if (permissionError) {
     return {
       success: false,
-      message: 'Unable to identify current user.',
-    };
-  }
-
-  const modPermissions = await currentUser.getModPermissionsForSubreddit(
-    subreddit.name
-  );
-  const canManagePosts =
-    modPermissions.includes('all') || modPermissions.includes('posts');
-  if (!canManagePosts) {
-    return {
-      success: false,
-      message: 'You need mod post permissions to create a weekly megathread.',
+      message: permissionError,
     };
   }
 
@@ -127,6 +134,35 @@ export async function createWeeklyMegathreadManual(): Promise<ManualMegathreadRe
     return {
       success: false,
       message: 'Unable to create the weekly megathread. Check the app logs.',
+    };
+  }
+}
+
+export async function createPostNow(
+  values: PostNowFormValues
+): Promise<ManualMegathreadResult> {
+  const title = values.title?.trim() ?? '';
+  const body = values.body?.trim() ?? '';
+  if (!title || !body) {
+    return { success: false, message: 'Title and body are required.' };
+  }
+
+  const permissionError = await canCurrentUserCreatePost();
+  if (permissionError) {
+    return { success: false, message: permissionError };
+  }
+
+  try {
+    const postId = await createMegathreadPost({
+      enabled: true,
+      title,
+      body,
+    });
+    return { success: true, message: `Post created successfully (${postId}).` };
+  } catch {
+    return {
+      success: false,
+      message: 'Unable to create the post. Check the app logs.',
     };
   }
 }
